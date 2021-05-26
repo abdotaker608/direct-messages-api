@@ -1,0 +1,42 @@
+from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from .managers import UserManager
+
+
+class User(AbstractBaseUser, PermissionsMixin):
+
+    uuid = models.CharField(max_length=500, unique=True)
+    username = models.CharField(max_length=100, unique=True)
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    is_superuser = models.BooleanField(default=False)
+
+    REQUIRED_FIELDS = ['uuid']
+    USERNAME_FIELD = "username"
+
+    objects = UserManager()
+
+    def __str__(self):
+        return self.username
+
+
+class Chat(models.Model):
+    # Typically two users per chat
+    users = models.ManyToManyField(User, related_name='users')
+
+    def __str__(self):
+        return f"{self.users.first()} - ${self.users.last()}"
+
+
+class Message(models.Model):
+    chat = models.ForeignKey(Chat, related_name='messages', on_delete=models.CASCADE)
+    sender = models.ForeignKey(User, related_name='messages', on_delete=models.CASCADE)
+    text = models.TextField(null=True, blank=True)
+    audio = models.BinaryField(null=True, blank=True)
+    attachment = models.BinaryField(null=True, blank=True)
+    seen = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.text[:20]
+
