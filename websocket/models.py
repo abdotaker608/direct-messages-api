@@ -45,8 +45,13 @@ class Message(models.Model):
     seen = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return self.text[:20]
+    def get_attachment(self):
+        if self.attachment is not None:
+            return self.attachment.decode()
+
+    def get_audio(self):
+        if self.audio is not None:
+            return self.audio.decode()
 
     class Meta:
         ordering = ('-created', )

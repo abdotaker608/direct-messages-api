@@ -131,7 +131,11 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         chat_id = payload['chatId']
         text = payload.get('text')
         attachment = payload.get('attachment')
+        if attachment is not None:
+            attachment = bytes(attachment, encoding='utf-8')
         audio = payload.get('audio')
+        if audio is not None:
+            audio = bytes(audio, encoding='utf-8')
         user = User.objects.get(uuid=uuid)
         chat = Chat.objects.get(id=chat_id)
         message = Message.objects.create(hash=hash, sender=user, chat=chat, text=text,
@@ -148,7 +152,9 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                 self.room_name,
                 {
                     'type': 'send_event',
-                    'payload': {},
+                    'payload': {
+                        'sender': {'uuid': payload['uuid']}
+                    },
                     'ev': 'read'
                 }
             )

@@ -23,6 +23,8 @@ class ChatSerializer(ModelSerializer):
 class MessageSerializer(ModelSerializer):
 
     sender = UserSerializer()
+    attachment = ReadOnlyField(source='get_attachment')
+    audio = ReadOnlyField(source='get_audio')
 
     class Meta:
         model = Message
