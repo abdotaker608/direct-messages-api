@@ -1,5 +1,8 @@
 from django.contrib import admin
-from .models import User, Chat
+from .models import User, Chat, Message
+
+
+admin.site.register(Message)
 
 
 class UserAdmin(admin.ModelAdmin):

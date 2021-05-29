@@ -22,13 +22,21 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Chat(models.Model):
     # Typically two users per chat
-    users = models.ManyToManyField(User, related_name='users')
+    users = models.ManyToManyField(User, related_name='chats')
 
     def __str__(self):
-        return f"{self.users.first()} - ${self.users.last()}"
+        return f"{self.users.first()} - {self.users.last()}"
+
+    def last_message(self):
+        from .serializers import MessageSerializer
+        return MessageSerializer(self.messages.last()).data
+
+    def unread(self):
+        return self.messages.filter(seen=False).count()
 
 
 class Message(models.Model):
+    hash = models.CharField(max_length=500)
     chat = models.ForeignKey(Chat, related_name='messages', on_delete=models.CASCADE)
     sender = models.ForeignKey(User, related_name='messages', on_delete=models.CASCADE)
     text = models.TextField(null=True, blank=True)
@@ -40,3 +48,5 @@ class Message(models.Model):
     def __str__(self):
         return self.text[:20]
 
+    class Meta:
+        ordering = ('-created', )
