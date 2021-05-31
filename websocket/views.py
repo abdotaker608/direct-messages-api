@@ -1,7 +1,9 @@
-from rest_framework import generics, mixins
+from rest_framework import generics, mixins, status
 from .serializers import ChatSerializer, MessageSerializer
-from .models import Chat, Message
+from .models import Chat
 import datetime
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 
 class ChatsView(generics.GenericAPIView, mixins.ListModelMixin):
@@ -34,3 +36,9 @@ class MessageView(generics.GenericAPIView, mixins.ListModelMixin):
         else:
             messages = chat.messages.all()[:20]
         return reversed(messages)
+
+
+# No use, just for hyping up dynos in heroku
+@api_view(['GET'])
+def hype_dynos(request):
+    return Response(status=status.HTTP_200_OK)

@@ -5,5 +5,6 @@ app_name = 'websocket'
 
 urlpatterns = [
     path('chats', views.ChatsView.as_view(), name='chats'),
-    path('<int:pk>/messages', views.MessageView.as_view(), name='messages')
+    path('<int:pk>/messages', views.MessageView.as_view(), name='messages'),
+    path('hype', views.hype_dynos, name='hype_dynos')
 ]
