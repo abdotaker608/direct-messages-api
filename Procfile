@@ -1,1 +1,1 @@
-web: daphne directMessagesApi:application -p $PORT -b 0.0.0.0 -v2
+web: daphne directMessagesApi.asgi:application -p $PORT -b 0.0.0.0 -v2
