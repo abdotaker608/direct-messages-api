@@ -168,6 +168,15 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                     'ev': 'message'
                 }
             )
+        if typ == 'rtc':
+            await self.channel_layer.group_send(
+                self.room_name,
+                {
+                    'type': 'send_event',
+                    'payload': payload,
+                    'ev': 'rtc'
+                }
+            )
 
     async def send_event(self, event):
         ev = event['ev']
