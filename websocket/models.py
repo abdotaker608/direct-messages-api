@@ -47,11 +47,11 @@ class Message(models.Model):
 
     def get_attachment(self):
         if self.attachment is not None:
-            return self.attachment.decode()
+            return self.attachment.tobytes().decode()
 
     def get_audio(self):
         if self.audio is not None:
-            return self.audio.decode()
+            return self.audio.tobytes().decode()
 
     class Meta:
         ordering = ('-created', )
