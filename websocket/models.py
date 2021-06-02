@@ -47,11 +47,17 @@ class Message(models.Model):
 
     def get_attachment(self):
         if self.attachment is not None:
-            return self.attachment.tobytes().decode()
+            try:
+                return self.attachment.tobytes().decode()
+            except ValueError:
+                return self.attachment.decode()
 
     def get_audio(self):
         if self.audio is not None:
-            return self.audio.tobytes().decode()
+            try:
+                return self.audio.tobytes().decode()
+            except ValueError:
+                return self.audio.decode()
 
     class Meta:
         ordering = ('-created', )
