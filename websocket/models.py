@@ -49,14 +49,14 @@ class Message(models.Model):
         if self.attachment is not None:
             try:
                 return self.attachment.tobytes().decode()
-            except ValueError:
+            except (ValueError, AttributeError):
                 return self.attachment.decode()
 
     def get_audio(self):
         if self.audio is not None:
             try:
                 return self.audio.tobytes().decode()
-            except ValueError:
+            except (ValueError, AttributeError):
                 return self.audio.decode()
 
     class Meta:
